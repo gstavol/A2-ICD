@@ -1,14 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-
-# Formatação de resultado vazio
-def noneformat(texto):
-    if texto != None:
-        texto = texto.text.strip()
-    else:
-        texto = '-'
-    return texto
+import limpeza
 
 # Função para obter o texto do parágrafo
 # que contenha uma palavra-chave
@@ -30,14 +23,15 @@ def find_href(elemento):
 # das primeiras "n paginas"
 def get_codes_n_pages(n):
     codes = []
-    for x in range(n):
+    for x in range(1, n, 1):
         url = "https://www.themoviedb.org/movie?page=" + str(x)
         page = requests.get(url, headers={'Accept-Language': 'en-US,en;q=0.9'})
         soup = BeautifulSoup(page.text, "lxml")
         codes_raw = soup.find_all("h2")[4:]
         for code in codes_raw:
             name = re.findall(r"movie/(\d+)-", str(code))
-            codes.append(name[0])
+            if name:
+                codes.append(name[0])
     return codes
 
 # Retorna uma lista com as resenhas do
@@ -54,7 +48,7 @@ def get_reviews_from_code(code):
     # Para cada resenha, obtém o texto e a nota
     for card in cards:
         info = card.find("div", {"class":'info'})
-        nota = noneformat(info.find("div", {"class":'rating_border rating'}))
+        nota = limpeza.noneformat(info.find("div", {"class":'rating_border rating'}))
 
         link = 'https://www.themoviedb.org' + find_href(info.find("h3"))
         pagina = requests.get(link, headers={'Accept-Language': 'en-US,en;q=0.9'})
@@ -80,17 +74,19 @@ def scrapping(codes):
         p_elements = soup.find_all('p')
         h2_elements = soup.find('h2')
         
-        # Elementos
+        # Obtenção dos elementos
         nome = h2_elements.find('a').text.strip()
-        ano = h2_elements.find('span').text.strip().replace("(", "").replace(")", "")
+        ano = limpeza.limpa_ano(h2_elements.find('span').text)
         score = re.findall(r'icon-r(\w{2})', str(soup.find('div', {'class':'percent'})))
-        classification = noneformat(soup.find('span', {'class':'certification'}))
-        genres = soup.find('span', {'class':'genres'}).text.strip().replace('\xa0',"").split(',')
-        budget = get_p_info(p_elements, 'Orçamento').replace('Orçamento ', "")
-        revenue = get_p_info(p_elements, 'Receita').replace('Receita ', "")
+        classification = limpeza.noneformat(soup.find('span', {'class':'certification'}))
+        genres = limpeza.limpa_genero(soup.find('span', {'class':'genres'}).text).split(',')
+        budget = limpeza.limpa_orcamento(get_p_info(p_elements, 'Orçamento'))
+        revenue = limpeza.limpa_receita(get_p_info(p_elements, 'Receita'))
         reviews = get_reviews_from_code(codes[y])
 
         # Adiciona o scrapping do filme à lista
-        film_list.append([nome, ano, score[0], classification, genres, budget, revenue, reviews])
+        if reviews and budget!='-' and revenue!='-':
+            film_list.append([nome, ano, score[0], classification, genres, budget, revenue, reviews])
+            print(codes[y])
 
     return film_list
