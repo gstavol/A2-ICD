@@ -7,7 +7,7 @@ dataset = pd.DataFrame(columns=headers)
 
 # Obtém os códigos de filmes das
 # primeiras 'codepags' páginas
-codepags = 10
+codepags = 20
 codes = get_codes_n_pages(codepags)
 print(codes)
 

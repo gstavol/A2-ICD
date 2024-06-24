@@ -7,8 +7,8 @@ import limpeza
 # que contenha uma palavra-chave
 def get_p_info(p_elements, info):
     for p in p_elements:
-        if info in limpeza.noneformat(p).text:
-            info_text = limpeza.noneformat(p).text.strip()
+        if info in limpeza.noneformat(p):
+            info_text = limpeza.noneformat(p)
     return info_text
 
 # Função para obter o texto do href
