@@ -1,3 +1,8 @@
+# Programa temporário para concatenar
+# os arquivos csv, uma vez que a API não
+# respondia a requisições maiores do que
+# 30 loops.
+
 import pandas as pd
 
 datahead_notas = pd.read_csv('Notas/Notas1.csv').iloc[:, 1:]

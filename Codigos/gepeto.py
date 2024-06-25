@@ -1,5 +1,10 @@
 from openai import OpenAI
 
+# Recebe uma lista [nota, resenha].
+# Traduz e resume a resenha, depois
+# gera uma nota para o filme e
+# retorna uma lista [nota, resenha]
+
 def resumo_gpt_e_nota(lista_recebida):
     client = OpenAI(api_key='')
 

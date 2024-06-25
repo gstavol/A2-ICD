@@ -2,15 +2,18 @@ import pandas as pd
 from gepeto import resumo_gpt_e_nota
 import re
 
+
 dataset = pd.read_csv('Filmes.csv')
 nddata = dataset.values
-x = 0
 
+# Descobre a maior quantidade de resenhas
+# em um mesmo filme
 max_len = 0
 for filme in nddata:
     if len(eval(filme[-1])) > max_len:
         max_len = len(eval(filme[-1]))
 
+# Cabeçalho das tabelas
 headers_resenhas = ['Filme']
 headers_notas = ['Filme']
 
@@ -21,7 +24,9 @@ for x in range(1, max_len + 1, 1):
 dataset_resenhas = pd.DataFrame(columns=headers_resenhas)
 dataset_notas = pd.DataFrame(columns=headers_notas)
 
-
+# Integração com a API do ChatGPT para
+# traduzir as resenhas e gerar notas
+# para aquelas que não possuam
 for filme in nddata:
     nome = filme[1]
     resenhas_formatadas = []
@@ -29,7 +34,14 @@ for filme in nddata:
     resenhas = eval(filme[-1])
     for resenha_nao_formatada in resenhas:
         resenha_formatada = []
+
+        # Envia [nota, resenha] e recebe
+        # a resenha traduzida acompanhada
+        # de uma nota para ela
         resenha_formatada_gpt = resumo_gpt_e_nota(resenha_nao_formatada)
+
+        # Mantém a nota original ou utiliza
+        # a nota gerada pela API
         if resenha_nao_formatada[0] == '-':
             resenha_formatada = resenha_formatada_gpt
         else:
@@ -40,6 +52,7 @@ for filme in nddata:
                 resenha_formatada = [resenha_nao_formatada[0], resenha_formatada_gpt[1]]
         resenhas_formatadas.append(resenha_formatada)
     
+    # Corpo das tabelas
     row_resenhas = [nome]
     row_notas = [nome]
     for review in resenhas_formatadas:
