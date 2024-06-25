@@ -1,8 +1,10 @@
 import pandas as pd
 from gepeto import resumo_gpt_e_nota
+import re
 
 dataset = pd.read_csv('./Filmes.csv')
 nddata = dataset.values
+x = 0
 
 max_len = 0
 for filme in nddata:
@@ -31,7 +33,7 @@ for filme in nddata:
         if resenha_nao_formatada[0] == '-':
             resenha_formatada = resenha_formatada_gpt
         else:
-            diferença = abs(int(resenha_nao_formatada[0][:2]) - int(resenha_formatada_gpt[0][:2]))
+            diferença = abs(int(re.sub(r'%', '', resenha_nao_formatada[0])) - int(re.sub(r'%', '', resenha_formatada_gpt[0])))
             if diferença > 25:
                 resenha_formatada = resenha_formatada_gpt
             else:

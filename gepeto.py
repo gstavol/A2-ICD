@@ -19,10 +19,8 @@ def resumo_gpt_e_nota(lista_recebida):
     response = client.chat.completions.create(
         messages = prompt,
         model = 'gpt-3.5-turbo-0125',
-        max_tokens = 1000,
+        max_tokens = 1200,
         temperature = 1
     )
 
     return eval(response.choices[0].message.content)
-
-print(resumo_gpt_e_nota(lista_teste))
