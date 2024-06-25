@@ -2,7 +2,7 @@ import pandas as pd
 
 #cria uma lista vazia, depois cria um dataset com base no csv de filmes
 listinha = []
-dataset = pd.read_csv('../Filmes.csv')
+dataset = pd.read_csv('Filmes.csv')
 datand = dataset.values
 
 #é formada uma coluna para cada genero dentre os filmes analisados, mais a primeira coluna para os filmes
@@ -21,7 +21,7 @@ for filme in datand:
         if genero in eval(filme[5]):
             row.append(1)
         else:
-            row.append(0)
+            row.append("")
     rows.append(row)
 
 for each_row in rows:

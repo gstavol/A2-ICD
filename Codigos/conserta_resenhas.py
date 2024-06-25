@@ -2,7 +2,7 @@ import pandas as pd
 from gepeto import resumo_gpt_e_nota
 import re
 
-dataset = pd.read_csv('../Filmes.csv')
+dataset = pd.read_csv('Filmes.csv')
 nddata = dataset.values
 x = 0
 
