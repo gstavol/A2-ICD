@@ -12,4 +12,4 @@ Os arquivos .csv são unidos em planilhas xlsx, então transformadas em peças d
 
 São analisadas e plotadas informações como o lucro do filme, a relação entre lucro/avaliação, quais pontos de destaque em cada gênero, a relação entre notas gerais e de análises completas, além de pontos em comum entre todos os filmes, como década de lançamento e distribuição de gêneros
 
-peças de análise contidas nos arquivos peças.xlsl
+peças de análise contidas nos arquivos "peças.xlsx" e "Peças design 1 & 2.slsx" 
